@@ -5,16 +5,16 @@ const campsiteRouter = express.Router();
 campsiteRouter.route('/')
 .get((req, res, next) => {
     Campsite.find()
-    .then(campsites => {
+    .then((campsites) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(campsites)
+        res.json(campsites);
     })
     .catch(err => next(err));
 })
 .post((req, res, next) => {
     Campsite.create(req.body)
-    .then(campsite => {
+    .then((campsite) => {
         console.log('Campsite Created ', campsite);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
