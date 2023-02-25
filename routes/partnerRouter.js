@@ -7,7 +7,7 @@ partnerRouter.route('/')
     Partner.find()
     .then((partners) => {
         res.statusCode = 200;
-        res.contentType('Content-Type', 'application/json');
+        res.setHeader('Content-Type', 'application/json');
         res.json(partners);
     })
     .catch(err => next(err));
@@ -64,10 +64,9 @@ partnerRouter.route('/:partnerId')
     })
     .catch(err => next(err));
 })
-.delete((req, res) => {
+.delete((req, res, next) => {
     Partner.findByIdAndDelete(req.params.partnerId)
-    .this(response => {
-        console.log(`Partner ${req.params.partnerId} was deleted`)
+    .then(response => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(response);

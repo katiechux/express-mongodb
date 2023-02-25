@@ -66,8 +66,7 @@ promotionRouter.route('/:promotionId')
 })
 .delete((req, res, next) => {
     Promotion.findByIdAndDelete(req.params.promotionId)
-    .this(response => {
-        console.log(`Promotion ${req.params.promotionId} was deleted`)
+    .then(response => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(response);
