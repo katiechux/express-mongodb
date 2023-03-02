@@ -53,7 +53,7 @@ campsiteRouter.route('/:campsiteId')
 .put((req, res, next) => {
     Campsite.findByIdAndUpdate(req.params.campsiteId, {
         $set: req.body
-    },{ new: true})
+    },{ new: true })
     .then(campsite => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
