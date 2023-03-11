@@ -24,10 +24,10 @@ favoriteRouter.route('/')
     Favorite.findOne({ user: req.user._id })
     .then((favorite) => {
         if (favorite) {
-            req.body.campsites.forEach((newFavorite) => {
+            req.body.campsites.forEach((campsite) => {
                 console.log(favorite.campsites);
-                if (!favorite.campsites.includes(newFavorite)) {
-                    favorite.campsites.push(newFavorite);
+                if (!favorite.campsites.includes(campsite)) {
+                    favorite.campsites.push(campsite);
                 }
             });
             favorite.save(err => {
@@ -104,7 +104,7 @@ favoriteRouter.route('/:campsiteId')
                     res.setHeader('Content-Type', 'application/json');
                     res.json(favorite);
                 }
-            })
+            });
         }
     })
 })
@@ -113,7 +113,27 @@ favoriteRouter.route('/:campsiteId')
     res.end('PUT operation not supported on /favorites/campsitesId');
 })
 .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
-
+    Favorite.findOne({ user: req.user._id })
+    .then((favorite) => {
+        if (favorite) {
+            favorite.campsites.splice(favorite.campsites.indexOf(req.params.campsiteId), 1);
+            favorite.save(err => {
+                if (err) {
+                    res.statusCode = 500
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json({err: err});
+                    return;
+                } else {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(favorite);
+                }
+            });
+        } else {
+            res.setHeader('Content-Type', 'text/plain');
+            res.end('There are no favorites to delete');
+        }
+    })
 });
 
 module.exports = favoriteRouter;
